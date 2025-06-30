@@ -3,7 +3,7 @@ Description: A simple CloudFormation template to create an IAM user, Roles, Auto
 
 Resources:
   NpdIAMUser:
-    Typer: AWS::IAM::User
+    Type: AWS::IAM::User
     Properties:
       UserName: npd-dev01
 
