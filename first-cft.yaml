@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: A simple CloudFormation template to create an IAM user, Roles, Auto Scaling Groups and S3 bucket access.
+Description: A simple CloudFormation template to create an IAM user, Roles, Auto Scaling Groups and S3 bucket access C.
 
 Resources:
   NpdIAMUser:
