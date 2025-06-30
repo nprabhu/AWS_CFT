@@ -1,28 +1,45 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'CloudFormation template to create an IAM user with administrative access to various AWS services.'
+Description: A simple CloudFormation template to create an IAM user, Roles, Auto Scaling Groups and S3 bucket access.
 
 Resources:
-  UsersNpd:
-    Type: 'AWS::IAM::User'
-    Properties: 
-      UserName: 'nprabhu'
-      
-
-  NpdGroup:
-    Type: 'AWS::IAM::Group'
+  NpdIAMUser:
+    Typer: AWS::IAM::User
     Properties:
-      GroupName: 'NpdGroup'
-      ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonRDSFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonVPCFullAccess'
+      UserName: npd-dev01
 
-
-  NpdGroupUser:
-    Type: 'AWS::IAM::UserToGroupAddition'
+  NpdS3Bucket:
+    Type: AWS::S3::Bucket
     Properties:
-      GroupName: 
-        Ref: NpdGroup
-      Users:
-        - nprabhu
+      BucketName: npd-dev-bucket01
+
+  NpdIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: npd-ec2-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource:
+                  - "arn:aws:s3:::npd-dev-bucket01"
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource:
+                  - "arn:aws:s3:::npd-dev-bucket01/*"
+
+
+
+
